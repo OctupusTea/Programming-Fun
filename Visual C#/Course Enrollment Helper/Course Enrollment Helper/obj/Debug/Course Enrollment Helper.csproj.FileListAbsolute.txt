@@ -1,0 +1,1 @@
+E:\Programming\Fun ( Visual C# )\Course Enrollment Helper\Course Enrollment Helper\bin\Debug\Course Enrollment Helper.exe.config

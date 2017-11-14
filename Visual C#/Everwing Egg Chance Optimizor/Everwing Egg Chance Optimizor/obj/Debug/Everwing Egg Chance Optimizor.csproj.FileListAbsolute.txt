@@ -1,0 +1,12 @@
+E:\Programming\Fun ( Visual C# )\Everwing Egg Chance Optimizor\Everwing Egg Chance Optimizor\bin\Debug\Everwing Egg Chance Optimizor.exe.config
+E:\Programming\Fun ( Visual C# )\Everwing Egg Chance Optimizor\Everwing Egg Chance Optimizor\bin\Debug\Everwing Egg Chance Optimizor.exe
+E:\Programming\Fun ( Visual C# )\Everwing Egg Chance Optimizor\Everwing Egg Chance Optimizor\bin\Debug\Everwing Egg Chance Optimizor.pdb
+E:\Programming\Fun ( Visual C# )\Everwing Egg Chance Optimizor\Everwing Egg Chance Optimizor\obj\Debug\Everwing Egg Chance Optimizor.csprojResolveAssemblyReference.cache
+E:\Programming\Fun ( Visual C# )\Everwing Egg Chance Optimizor\Everwing Egg Chance Optimizor\obj\Debug\Everwing_Egg_Chance_Optimizor.Form1.resources
+E:\Programming\Fun ( Visual C# )\Everwing Egg Chance Optimizor\Everwing Egg Chance Optimizor\obj\Debug\Everwing_Egg_Chance_Optimizor.Properties.Resources.resources
+E:\Programming\Fun ( Visual C# )\Everwing Egg Chance Optimizor\Everwing Egg Chance Optimizor\obj\Debug\Everwing Egg Chance Optimizor.csproj.GenerateResource.Cache
+E:\Programming\Fun ( Visual C# )\Everwing Egg Chance Optimizor\Everwing Egg Chance Optimizor\obj\Debug\Everwing Egg Chance Optimizor.exe
+E:\Programming\Fun ( Visual C# )\Everwing Egg Chance Optimizor\Everwing Egg Chance Optimizor\obj\Debug\Everwing Egg Chance Optimizor.pdb
+E:\Programming\Fun\Visual C#\Everwing Egg Chance Optimizor\Everwing Egg Chance Optimizor\bin\Debug\Everwing Egg Chance Optimizor.exe.config
+E:\Programming\Fun\Visual C#\Everwing Egg Chance Optimizor\Everwing Egg Chance Optimizor\obj\Debug\Everwing Egg Chance Optimizor.exe
+E:\Programming\Fun\Visual C#\Everwing Egg Chance Optimizor\Everwing Egg Chance Optimizor\obj\Debug\Everwing Egg Chance Optimizor.pdb
