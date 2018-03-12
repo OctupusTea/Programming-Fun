@@ -1,135 +1,152 @@
 #ifdef MAKE
-
-#include "terminal_fun.h"
-
+#include "terminal.hpp"
+#include "terminal_fun.hpp"
 #else
-
-#include "../include/terminal_fun.h"
-
+#include "../include/terminal.hpp"
+#include "../include/terminal_fun.hpp"
 #endif
 
 #include <iostream>
 #include <vector>
 #include <string>
 
+extern "C"
+{
+#include <sys/ioctl.h>
+#include <unistd.h>
+}
+
 using namespace std;
 
-const uint32_t FORMAT_MASK[ 16 ] = { 0x0, 0x1, 0x2, 0x4, 0x8, 0x10, 0x20, 0x40, 0x80, 0x100, 0x200, 0x400, 0x800, 0x1000, 0x2000, 0x4000 };
+#define ALL_CHARACTERS " !\"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
 
-Terminal_Fun::Terminal_Fun( void )
+Terminal_Fun::Terminal_Fun( void ) : __terminal( )
 {
-	_Set_Height( 24 );
-	_Set_Width( 80 );
+	//	empty
 }
 
-Terminal_Fun::Terminal_Fun( int height, int width )
+void Terminal_Fun::Circle_Loop( char character, Orientation orientation )
 {
-	_Set_Height( height );
-	_Set_Width( width );
-}
-
-Terminal_Fun::~Terminal_Fun( void )
-{
-	cout << "\033[m";
-}
-
-bool Terminal_Fun::_Set_Height( int height )
-{
-	if( height > 0 and height < 200 )
-	{
-		__height = height;
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
-bool Terminal_Fun::_Set_Width( int width )
-{
-	if( width > 0 and width < 200 )
-	{
-		__width = width;
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
-ostream& operator<<( ostream &output, Terminal_Fun &terminal )
-{
-	output << terminal.__output_string;
-	terminal.__output_string.clear( );
-	return output;
-}
-
-void Terminal_Fun::Set_Format( Color background_color, uint32_t format, Color foreground_color )
-{
-	string output_temp = "\033[";
+	winsize terminal_size;
+	ioctl( STDOUT_FILENO, TIOCGWINSZ, &terminal_size );
 	
-	bool format_set = false;
-	for( int i = 0; i < 16; i++ )
+	int left = 1, right = terminal_size.ws_col;
+	int top = 1, bottom = terminal_size.ws_row;
+
+	if( orientation == CLOCKWISE )
 	{
-		if( format & FORMAT_MASK[ i ] )
+		while( left < right and top < bottom )
 		{
-			output_temp += to_string( i ) + ';';
-			format_set = true;
+			for( int i = left; i != right; ++i )
+			{
+				__terminal.Position( Position( top, i ) );
+				__terminal << character;
+				cout << __terminal;
+				usleep( 1 );
+			}
+
+			for( int j = top; j != bottom; ++j )
+			{
+				__terminal.Position( Position( j, right ) );
+				__terminal << character;
+				cout << __terminal;
+				usleep( 1 );
+			}
+
+			for( int i = right; i != left; --i )
+			{
+				__terminal.Position( Position( bottom, i ) );
+				__terminal << character;
+				cout << __terminal;
+				usleep( 1 );
+			}
+
+			for( int j = bottom; j != top; --j )
+			{
+				__terminal.Position( Position( j, left ) );
+				__terminal << character;
+				cout << __terminal;
+				usleep( 1 );
+			}
+
+			++left, --right;
+			++top, --bottom;
 		}
 	}
-
-	if( not format_set )
-	{
-		output_temp += "0;";
-	}
-
-	output_temp += '4' + to_string( background_color ) + ';';
-	output_temp += '3' + to_string( foreground_color ) + 'm';
-
-	__output_string += output_temp;
-}
-
-void Terminal_Fun::Set_Background( Color color )
-{
-	string output_temp = "\033[4" + to_string( color ) + 'm';
-	__output_string += output_temp;
-}
-
-void Terminal_Fun::Set_Foreground( Color color )
-{
-	string output_temp = "\033[1" + to_string( color ) + 'm';
-}
-
-bool Terminal_Fun::Set_Position( Position position )
-{
-	if( position.row < __height and position.column < __width )
-	{
-		__current_position = position;
-		string output_temp = "\033[" + to_string( __current_position.row ) + ';' + to_string( __current_position.column ) + 'H';
-		__output_string += output_temp;
-		return true;
-	}
 	else
 	{
-		return false;
+		while( left < right and top < bottom )
+		{
+			for( int j = top; j != bottom; ++j )
+			{
+				__terminal.Position( Position( j, left ) );
+				__terminal << character;
+				cout << __terminal;
+				usleep( 1 );
+			}
+
+			for( int i = left; i != right; ++i )
+			{
+				__terminal.Position( Position( bottom, i ) );
+				__terminal << character;
+				cout << __terminal;
+				usleep( 1 );
+			}
+
+			for( int j = bottom; j != top; --j )
+			{
+				__terminal.Position( Position( j, right ) );
+				__terminal << character;
+				cout << __terminal;
+				usleep( 1 );
+			}
+
+			for( int i = right; i != left; --i )
+			{
+				__terminal.Position( Position( top, i ) );
+				__terminal << character;
+				cout << __terminal;
+				usleep( 1 );
+			}
+
+			++left, --right;
+			++top, --bottom;
+		}
 	}
 }
 
-bool Terminal_Fun::Set_Position( int row, int column )
+void Terminal_Fun::Random_Print( time_t time_span, string characters, Colors color )
 {
-	return Set_Position( Position( row, column ) );
+	winsize terminal_size;
+	ioctl( STDOUT_FILENO, TIOCGWINSZ, &terminal_size );
+
+	if( characters == "" )
+	{
+		characters = ALL_CHARACTERS;
+	}
+	
+	time_t start_time = time( nullptr );
+	while( time_span == 0 or time( nullptr ) - start_time < time_span )
+	{
+		__terminal.Position( Position( rand( ) % terminal_size.ws_row + 1, rand( ) % terminal_size.ws_col + 1 ) );
+
+		class Format temp = __terminal.Format( );
+		temp.Foreground( color );
+		temp.Background( color );
+		temp.Formats( rand( ) % 2 );
+		__terminal.Format( temp );
+		
+		__terminal << characters[ rand( ) % characters.length( ) ];
+		cout << __terminal;
+
+		usleep( 1 );
+	}
+
+	__terminal.Format( Format( ) );
+	cout << __terminal;
 }
 
-Terminal_Fun& Terminal_Fun::operator<<( const string &output )
+void Terminal_Fun::Clear_Screen( void )
 {
-	__output_string += output;
-	return *this;
-}
-
-void Terminal_Fun::Clean_Screen( void )
-{
-	__output_string += "\033[2J";
-	cout << *this;
+	cout << "\e[2J" << "\e[;H" << flush;
 }

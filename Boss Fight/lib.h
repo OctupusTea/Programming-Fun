@@ -8,6 +8,6 @@ class Lib
 
 	public :
 		;
-}
+};
 
 #endif

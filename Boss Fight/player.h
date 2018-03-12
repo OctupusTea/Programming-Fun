@@ -11,6 +11,6 @@ class Player
 
 	public :
 		Player( void );
-}
+};
 
 #endif

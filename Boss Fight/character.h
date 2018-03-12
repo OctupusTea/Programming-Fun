@@ -10,7 +10,7 @@
 #define _DEFAULT_HEALTH ( 10000 )
 #define _DEFAULT_MAGE ( 1000 )
 
-virtual class Character
+class Character
 {
 	private :
 		unsigned _health;
@@ -31,6 +31,6 @@ virtual class Character
 		virtual Character( const int&, const int&, const bool[ 16 ], const bool[ 16 ], const int[ 16 ] )
 
 		virtual void attack( Character& );
-}
+};
 
 #endif
