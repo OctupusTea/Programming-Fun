@@ -6,6 +6,11 @@
 #include <iomanip>
 #include <string>
 
+extern "C"
+{
+#include <sys/ioctl.h>
+}
+
 using namespace std;
 
 #define FORMAT_COUNT 16
@@ -17,9 +22,10 @@ class Position
 	private:
 		int __row;
 		int __col;
+		bool __space_warp;
 
 	public:
-		Position( int row = 1, int col = 1 );
+		Position( int row = 1, int col = 1, bool space_warp = true );
 
 		int Row( void ) const;
 		bool Row( int row );
@@ -63,6 +69,7 @@ class Terminal
 		class Position __position;
 		class Format __format;
 		stringstream __output;
+		winsize __size;
 		
 	public:
 		Terminal( void );
@@ -74,6 +81,9 @@ class Terminal
 		class Format& Format( void );
 		const class Format& Format( void ) const;
 		bool Format( const class Format &format );
+
+		winsize Size( void ) const;
+		winsize Remeasure_Size( void );
 
 		friend ostream& operator<< ( ostream &output, Terminal &terminal );
 	

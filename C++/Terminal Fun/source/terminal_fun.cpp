@@ -1,14 +1,10 @@
-#ifdef MAKE
 #include "terminal.hpp"
 #include "terminal_fun.hpp"
-#else
-#include "../include/terminal.hpp"
-#include "../include/terminal_fun.hpp"
-#endif
 
 #include <iostream>
 #include <vector>
 #include <string>
+#include <cmath>
 
 extern "C"
 {
@@ -25,10 +21,9 @@ Terminal_Fun::Terminal_Fun( void ) : __terminal( )
 	//	empty
 }
 
-void Terminal_Fun::Circle_Loop( char character, Orientation orientation )
+void Terminal_Fun::Rectangular_Loop( char character, Orientation orientation )
 {
-	winsize terminal_size;
-	ioctl( STDOUT_FILENO, TIOCGWINSZ, &terminal_size );
+	winsize terminal_size = __terminal.Size( );
 	
 	int left = 1, right = terminal_size.ws_col;
 	int top = 1, bottom = terminal_size.ws_row;
@@ -117,8 +112,7 @@ void Terminal_Fun::Circle_Loop( char character, Orientation orientation )
 
 void Terminal_Fun::Random_Print( time_t time_span, string characters, Colors color )
 {
-	winsize terminal_size;
-	ioctl( STDOUT_FILENO, TIOCGWINSZ, &terminal_size );
+	winsize terminal_size = __terminal.Size( );
 
 	if( characters == "" )
 	{
@@ -139,11 +133,15 @@ void Terminal_Fun::Random_Print( time_t time_span, string characters, Colors col
 		__terminal << characters[ rand( ) % characters.length( ) ];
 		cout << __terminal;
 
-		usleep( 1 );
+//		usleep( 1 );
 	}
 
 	__terminal.Format( Format( ) );
 	cout << __terminal;
+}
+
+void Terminal_Fun::Rectangular_Fill( char character, Orientation orientation )
+{
 }
 
 void Terminal_Fun::Clear_Screen( void )
