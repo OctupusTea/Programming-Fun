@@ -1,8 +1,4 @@
-#ifdef MAKE
 #include "terminal.hpp"
-#else
-#include "../include/terminal.hpp"
-#endif
 
 #include <iostream>
 #include <sstream>
@@ -17,7 +13,7 @@ extern "C"
 
 using namespace std;
 
-Position::Position( int row, int col )
+Position::Position( int row, int col, bool space_warp ) : __space_warp( space_warp )
 {
 	Row( row );
 	Col( col );
@@ -30,17 +26,23 @@ int Position::Row( void ) const
 
 bool Position::Row( int row )
 {
-	if( row <= 0 )
-	{
-		__row = 1;
-		return false;
-	}
-	
 	winsize terminal_size;
 	ioctl( STDOUT_FILENO, TIOCGWINSZ, &terminal_size );
+
+	if( row <= 0 )
+	{
+		if( row <= -terminal_size.ws_row or ( not __space_warp ) )
+		{
+			return false;
+		}
+		else
+		{
+			row += terminal_size.ws_row;
+		}
+	}
+	
 	if( row > terminal_size.ws_row )
 	{
-		__row = terminal_size.ws_row;
 		return false;
 	}
 
@@ -55,17 +57,23 @@ int Position::Col( void ) const
 
 bool Position::Col( int col )
 {
-	if( col <= 0 )
-	{
-		__col = 1;
-		return false;
-	}
-
 	winsize terminal_size;
 	ioctl( STDOUT_FILENO, TIOCGWINSZ, &terminal_size );
+
+	if( col <= 0 )
+	{
+		if( col <= -terminal_size.ws_col or ( not __space_warp ) )
+		{
+			return false;
+		}
+		else
+		{
+			col += terminal_size.ws_col;
+		}
+	}
+
 	if( col > terminal_size.ws_col )
 	{
-		__col = terminal_size.ws_col;
 		return false;
 	}
 
@@ -162,7 +170,7 @@ const uint32_t Format::Mask[ 16 ] = { 0x0, 0x1, 0x2, 0x4, 0x8, 0x10, 0x20, 0x40,
 
 Terminal::Terminal( void ) : __position( ), __format( )
 {
-	//	empty
+	Remeasure_Size( );
 }
 
 class Position& Terminal::Position( void )
@@ -201,6 +209,17 @@ bool Terminal::Format( const class Format &format )
 	__output << __format.String( );
 
 	return true;
+}
+
+winsize Terminal::Size( void ) const
+{
+	return __size;
+}
+
+winsize Terminal::Remeasure_Size( void )
+{
+	ioctl( STDOUT_FILENO, TIOCGWINSZ, &__size );
+	return __size;
 }
 
 ostream& operator<< ( ostream &output, Terminal &terminal )

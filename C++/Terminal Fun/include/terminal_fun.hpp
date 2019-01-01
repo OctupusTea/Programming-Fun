@@ -1,11 +1,7 @@
 #ifndef TERMINAL_FUN
 #define TERMINAL_FUN
 
-#ifdef MAKE
 #include "terminal.hpp"
-#else
-#include "../include/terminal.hpp"
-#endif
 
 #include <iostream>
 #include <vector>
@@ -15,6 +11,9 @@ using namespace std;
 
 enum Orientation{ CLOCKWISE = 0, COUNTERCLOCKWISE = 1 };
 
+const double PI = 3.141592653589793;
+const double EPSILON = 0.001;
+
 class Terminal_Fun
 {
 	private:
@@ -23,8 +22,9 @@ class Terminal_Fun
 	public:
 		Terminal_Fun( void );
 
-		void Circle_Loop( char character = '@', Orientation orientation = CLOCKWISE );
+		void Rectangular_Loop( char character = '@', Orientation orientation = CLOCKWISE );
 		void Random_Print( time_t time_span = 0, string characters = "", Colors colors = COLOR_RANDOM );
+		void Rectangular_Fill( char character = '@', Orientation orientation = CLOCKWISE );
 		void Clear_Screen( void );
 };
 
