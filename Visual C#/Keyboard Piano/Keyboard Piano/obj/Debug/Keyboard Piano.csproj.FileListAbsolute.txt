@@ -1,5 +1,0 @@
-E:\Programming\Fun ( Visual C# )\Keyboard Piano\Keyboard Piano\bin\Debug\Keyboard Piano.exe.config
-E:\Programming\Fun ( Visual C# )\Keyboard Piano\Keyboard Piano\obj\Debug\Keyboard Piano.csprojResolveAssemblyReference.cache
-E:\Programming\Fun ( Visual C# )\Keyboard Piano\Keyboard Piano\obj\Debug\Keyboard_Piano.Form1.resources
-E:\Programming\Fun ( Visual C# )\Keyboard Piano\Keyboard Piano\obj\Debug\Keyboard_Piano.Properties.Resources.resources
-E:\Programming\Fun ( Visual C# )\Keyboard Piano\Keyboard Piano\obj\Debug\Keyboard Piano.csproj.GenerateResource.Cache
